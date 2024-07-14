@@ -63,14 +63,18 @@ app.event('app_home_opened', async ({ event, client }) => {
 })
 
 app.action(CHIP_ACTION_REGEX, async ({ action, say, ack, client }) => {
-  ack()
-  if (action.type !== 'button') return
+  ack();
+  if (action.type !== 'button') return;
+
+  console.log('Received action:', JSON.stringify(action, null, 2)); // Log the entire action object
+
   // get the user id from the action id
-  let userID = action.action_id.split(':')[2]
-  let path = action.action_id.split(':')[1]
+  let userID = action.action_id.split(':')[2];
+  let path = action.action_id.split(':')[1];
+
   await client.users.info({
     user: userID,
-  })
+  });
 
   if (path.includes('path-')) {
     await interact(userID, say, client, {
@@ -78,7 +82,29 @@ app.action(CHIP_ACTION_REGEX, async ({ action, say, ack, client }) => {
       payload: {
         label: action.value,
       },
-    })
+    });
+  } else if (path === 'button') {
+    try {
+      const [item, name] = action.text.text.split('|'); // Split the name using the delimiter
+
+      console.log('Item:', item);
+      console.log('Name:', name);
+
+      if (!item || !name) {
+        console.error('Item or name not found in payload');
+        return;
+      }
+
+      await interact(userID, say, client, {
+        type: 'button',
+        payload: {
+          item: item,
+          name: name,
+        },
+      });
+    } catch (error) {
+      console.error('Error parsing action.text.text:', error);
+    }
   } else {
     await interact(userID, say, client, {
       type: 'intent',
@@ -90,9 +116,37 @@ app.action(CHIP_ACTION_REGEX, async ({ action, say, ack, client }) => {
         },
         entities: [],
       },
-    })
+    });
   }
-})
+});
+
+
+{
+  "name": "Hosting",
+  "request": {
+      "type": "path-ow8xc3fz6",
+      "payload": {
+          "label": "Hosting",
+          "actions": []
+      }
+  }
+}
+
+{
+  "name": "Aerin Product",
+  "request": {
+      "type": "button",
+      "payload": {
+          "item": 10682,
+          "name": "Aerin Product",
+          "actions": []
+      }
+  }
+}
+
+
+
+
 
 app.message(ANY_WORD_REGEX, async ({ message, say, client }) => {
   // Ignoring some message types
