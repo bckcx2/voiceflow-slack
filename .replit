@@ -1,6 +1,6 @@
-run = "npm install && npm start"
-entrypoint = "index.js"
+run = "npm run start"
 hidden = [".config", "package-lock.json"]
+modules = ["nodejs-20", "nix"]
 
 [languages]
 
@@ -56,14 +56,11 @@ packageSearch = true
 guessImports = true
 enabledForHosting = false
 
-[interpreter]
-command = ["prybar-nodejs", "-q", "--ps1", "\u0001\u001B[33m\u0002\u0001\u001B[00m\u0002 ", "-i"]
-
 [unitTest]
 language = "nodejs"
 
 [nix]
-channel = "stable-22_11"
+channel = "stable-24_05"
 
 [env]
 XDG_CONFIG_HOME = "/home/runner/$REPL_SLUG/.config"
@@ -78,4 +75,4 @@ regex = 'Error \[ERR_REQUIRE_ESM\]'
 message = "We see that you are using require(...) inside your code. We currently do not support this syntax. Please use 'import' instead when using external modules. (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)"
 
 [deployment]
-run = ["sh", "-c", "node index.js"]
+run = ["sh", "-c", "npm run start"]
