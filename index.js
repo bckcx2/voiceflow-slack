@@ -1,4 +1,4 @@
-/* eslint-disable no-await-in-loop */ test
+/* eslint-disable no-await-in-loop */
 import slack_pkg from '@slack/bolt'
 const { App } = slack_pkg
 import { createSession, cleanEmail, stripEmojis, stripBackSlashs, cleanText, CHIP_ACTION_REGEX, ANY_WORD_REGEX } from './components/utils.js'
