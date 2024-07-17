@@ -62,6 +62,7 @@ app.event('app_home_opened', async ({ event, client }) => {
   Home.show(client, event)
 })
 
+// Custom Code to handle voiceflow dynamic buttons
 app.action(CHIP_ACTION_REGEX, async ({ action, say, ack, client }) => {
   ack();
   if (action.type !== 'button') return;
@@ -85,21 +86,23 @@ app.action(CHIP_ACTION_REGEX, async ({ action, say, ack, client }) => {
     });
   } else if (path === 'button') {
     try {
-      const [item, name] = action.text.text.split('|'); // Split the name using the delimiter
+      //const [name, item] = action.text.text.split('|'); // Split the name using the delimiter
 
-      console.log('Item:', item);
+      const name = action.value; // Split the name using the delimiter
+
+      //console.log('Item:', item);
       console.log('Name:', name);
 
-      if (!item || !name) {
+      /*if (!item || !name) {
         console.error('Item or name not found in payload');
         return;
-      }
+      }*/
 
       await interact(userID, say, client, {
         type: 'button',
         payload: {
-          item: item,
           name: name,
+          //item: item
         },
       });
     } catch (error) {
